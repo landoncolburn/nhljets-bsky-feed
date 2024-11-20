@@ -1,3 +1,4 @@
+import { NHLJETS } from './authors'
 import {
   OutputSchema as RepoEvent,
   isCommit,
@@ -13,15 +14,18 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     // This logs the text of every post off the firehose.
     // Just for fun :)
     // Delete before actually using
-    for (const post of ops.posts.creates) {
-      console.log(post.record.text)
-    }
+    // for (const post of ops.posts.creates) {
+    // console.log(post.record.text)
+    // }
 
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
         // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
+        // return create.record.text.toLowerCase().includes('alf')
+
+        // only posts from the NHLJETS authors
+        return NHLJETS.includes(create.author)
       })
       .map((create) => {
         // map alf-related posts to a db row
